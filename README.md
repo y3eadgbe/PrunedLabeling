@@ -6,7 +6,11 @@ This is an implementation of Pruned Labeling methods for reachability queries on
 A reachability query (s, t) asks if there is a path between two nodes s and t.
 Our program quickly answers reachability queries on a given graph by precomputing an index.
 
-### Usage
+Our methods "Pruned Landmark Labeling" and "Pruned Path Labeling" are provided as C++ classes,
+`RQPrunedLandmarkLabeling` and `RQPrunedPathLabeling`.
+Please see `sample/benchmark.cpp` for the detailed usage.
+
+### Running a sample program
     $ make
     $ ./benchmark < sample.graph
 An input (directed) graph file should be given in the following format:
