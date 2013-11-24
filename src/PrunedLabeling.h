@@ -25,6 +25,7 @@
 #include <vector>
 #include <utility>
 
+// Base Class
 class PrunedLabelingBase {
 public:
     virtual ~PrunedLabelingBase(){};
@@ -33,6 +34,7 @@ public:
     virtual long long indexSize() = 0;
 };
 
+// Pruned Landmark Labeling
 class RQPrunedLandmarkLabeling : public PrunedLabelingBase {
 private:
     std::vector<std::vector<int> > G, rG;
@@ -50,6 +52,7 @@ public:
     long long indexSize();
 };
 
+// Pruned Path Labeling
 class RQPrunedPathLabeling : public PrunedLabelingBase {
 private:
     std::vector<std::vector<int> > G, rG;

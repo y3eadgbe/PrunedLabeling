@@ -17,7 +17,8 @@ double getTime() {
     return (double)tv.tv_sec + (double)tv.tv_usec / 1000000.;
 }
 
-std::vector<std::vector<int> > readGraph() {
+// returns (Adjacency List, (|V|, |E|))
+pair<vector<vector<int> >, pair<int, int> > readGraph() {
     string line;
     int V, E;
     stringstream ss;
@@ -38,47 +39,51 @@ std::vector<std::vector<int> > readGraph() {
             G[i].push_back(n);
         }
     }
-    return G;
+    return make_pair(G, make_pair(V, E));
 }
 
 int main() {
-    vector<vector<int> > G = readGraph();
+    pair<vector<vector<int> >, pair<int, int> > G = readGraph();
+    vector<vector<int> > adj = G.first;
+    int V = G.second.first, E = G.second.second;
     double startTime, endTime;
 
+    cout << "|V| = " << V << ", |E| = " << E << endl << endl; 
     cout << "Constructing Index ... " << flush;
 
     startTime = getTime();
 
-    PrunedLabelingBase* rq = new RQPrunedPathLabeling(G);
-    //PrunedLabelingBase* rq = new RQPrunedLandmarkLabeling(G);
+    PrunedLabelingBase* rq = new RQPrunedPathLabeling(adj);
+    //PrunedLabelingBase* rq = new RQPrunedLandmarkLabeling(adj);
 
     endTime = getTime();
 
-    cout << "DONE" << endl;
+    cout << "DONE" << endl << endl;
     cout << "Indexing Time: " << endTime - startTime << " sec" << endl;
-    cout<< "Index Size: " << rq->indexSize() << " byte" << endl;
+    cout<< "Index Size: " << rq->indexSize() << " byte" << endl << endl;
 
-    int num = 0;
     vector<int> ss, ts;
     for (int i = 0; i < numQueries; i++) {
-        ss.push_back(rand() % G.size());
-        ts.push_back(rand() % G.size());
+        ss.push_back(rand() % V);
+        ts.push_back(rand() % V);
     }
 
     cout << "Querying (" << numQueries << " times) ... " << flush;
 
     startTime = getTime();
 
+    int positiveQuery = 0;
     for (int i = 0; i < numQueries; i++) {
         if (rq->query(ss[i],ts[i])) {
-            num++;
+            positiveQuery++;
         }
     }
     
     endTime = getTime();
 
-    cout << "DONE" << endl;
+    cout << "DONE" << endl << endl;
     cout << "Total Query Time (" << numQueries << " times): " << endTime - startTime << " sec" << endl;
+    cout << "#PositiveQuery: " << positiveQuery << endl;
     
     return 0;
 }
