@@ -1,3 +1,9 @@
+// Usage: ./benchmark < (Input Graph)
+//
+// An input directed graph file should be given in the following format:
+// * First line contains #vertices and #edges separated by a space.
+// * The (i+1)-th line (0 <= i < |V|) contains indexes of vertices which are adjacent to the i-th vertex, separated by a space. (0-indexed)
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -43,6 +49,7 @@ pair<vector<vector<int> >, pair<int, int> > readGraph() {
 }
 
 int main() {
+    // read the input graph from stdin
     pair<vector<vector<int> >, pair<int, int> > G = readGraph();
     vector<vector<int> > adj = G.first;
     int V = G.second.first, E = G.second.second;
@@ -53,6 +60,7 @@ int main() {
 
     startTime = getTime();
 
+    // construct an index
     PrunedLabelingBase* rq = new RQPrunedPathLabeling(adj);
     //PrunedLabelingBase* rq = new RQPrunedLandmarkLabeling(adj);
 
@@ -62,6 +70,7 @@ int main() {
     cout << "Indexing Time: " << endTime - startTime << " sec" << endl;
     cout<< "Index Size: " << rq->indexSize() << " byte" << endl << endl;
 
+    // prepare random queries
     vector<int> ss, ts;
     for (int i = 0; i < numQueries; i++) {
         ss.push_back(rand() % V);
@@ -72,6 +81,7 @@ int main() {
 
     startTime = getTime();
 
+    // issue queries
     int positiveQuery = 0;
     for (int i = 0; i < numQueries; i++) {
         if (rq->query(ss[i],ts[i])) {
