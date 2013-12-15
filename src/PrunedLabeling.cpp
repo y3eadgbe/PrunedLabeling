@@ -331,13 +331,14 @@ void RQPrunedPathLabeling::getOptimalPath(vector<bool>& used, vector<int>* path)
     
     while(dp[v] != value[v]) {
         long long nextVal = dp[v] - value[v];
-        for (int i = 0; i < (int)this->rG[v].size(); i++) {
+        for (int i = 0; i < (int)this->rG[v].size() && path->size() < (1 << 16); i++) {
             if (dp[this->rG[v][i]] == nextVal) {
                 v = this->rG[v][i];
                 path->push_back(v);
                 break;
             }
         }
+        if (path->size() == (1 << 16) - 1) break;
     }
 
     reverse(path->begin(), path->end());
